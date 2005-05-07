@@ -1,0 +1,103 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use lib 'lib';
+use RunApp::Simple;
+use Getopt::Long;
+
+my $config;
+die unless GetOptions ("cover"   => \$config->{cover},
+		       "debug"   => \$config->{debug},
+		       "reset"   => \$config->{reset},
+		       "profiler"=> \$config->{profiler});
+
+my $profile = YAML::LoadFile('config.yaml');
+RunApp::Simple->new(%$profile)->run();
+
+__END__
+
+=head1 NAME
+
+runapp - default command line interface of L<RunApp::Simple>
+
+=head1 SYNOPSIS
+
+As an example, here is a fast way to setup a Kwiki site:
+
+1. Create a new Kwiki directory
+
+  % mkdir MySite
+  % cd MySite
+  % mkdir MySite/kwiki
+  % kwiki -new kwiki/
+
+2. Edit "config.yaml", and paste the following block into it.  (If
+you're copying from source, remove only leading 2 white-spaces for
+each line, don't remove too much from of C<config_block>. )
+
+  config_block: |-2
+    DocumentRoot [% cwd %]/kwiki
+    AddDefaultCharset UTF-8
+    DirectoryIndex index.cgi
+    <Location />
+      SetHandler perl-script
+      PerlSetVar KwikiBaseDir [% cwd %]/kwiki
+      PerlHandler +Kwiki::ModPerl
+    </Location>
+  mode: apache_perl
+
+3. execute "runapp" from shell.
+
+=head1 DESCRIPTION
+
+This scripet provides an default interface of RunApp::Simple module.
+It reads "config.yaml" from current working directory and then
+start-up your application according to what is configured in
+"config.yaml".
+
+=head1 config.yaml
+
+In your config.yaml, you may have the following key-value pair.  That
+would be passed to C<RunApp::Simple>. Please notice that it must be
+valid YAML syntax.
+
+=over 4
+
+=item mode
+
+Possible values: apache_perl , apache_cgi.
+Default: apache_cgi
+
+=item apxs
+
+Path to your "apxs" executable.
+Default: /usr/sbin/apxs.
+
+=item config_block
+
+A block of text to put in your httpd.conf.
+
+=item hostname
+
+Hostname are detected automatically, but you may also specify it here.
+
+=item port
+
+Port number for your applcation. Default: 12345.
+
+=head1 SEE ALSO
+
+L<RunApp>,L<RunApp::Simple>,L<YAML>
+
+=head1 COPYRIGHT
+
+Copyright 2005 by Kang-min Liu <gugod@gugod.org>.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+See <http://www.perl.com/perl/misc/Artistic.html>
+
+=cut
+

@@ -1,0 +1,14 @@
+name: RunApp-Simple
+version: 0.01
+abstract: RunApp in a Simple way
+author: Kang-min Liu <gugod@gugod.org>
+license: perl
+distribution_type: module
+build_requires:
+  Test::More: 0
+requires:
+  RunApp: 0
+no_index:
+  directory:
+    - inc
+generated_by: Module::Install version 0.36

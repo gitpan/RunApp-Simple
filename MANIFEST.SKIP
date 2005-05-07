@@ -1,0 +1,5 @@
+html/
+^Makefile$
+.bak$
+.old$
+^runapp-old.pl$
