@@ -6,7 +6,7 @@ use File::Spec::Functions qw(catfile catdir);
 use Cwd;
 use YAML;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 field mode => 'apache_cgi';
 field 'apxs';
