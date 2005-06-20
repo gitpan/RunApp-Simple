@@ -6,20 +6,22 @@ use File::Spec::Functions qw(catfile catdir);
 use Cwd;
 use YAML;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 field mode => 'apache_cgi';
 field 'apxs';
 field 'config_block';
-field hostname => 'localhost';
-field port => 12345;
+field 'hostname';
+field 'port';
+field 'required_modules';
+
 
 field default_config => -init => q{
     {
         cwd => Cwd::cwd(),
-	webmaster => 'admin@' . $self->hostname,
-        hostname => $self->hostname,
-        port => $self->port
+	webmaster => 'admin@localhost',
+        hostname => 'localhost',
+        port => 12345,
     }
 };
 
@@ -41,7 +43,7 @@ field default_profile => {
 	report => 1,
 	CTL => 'RunApp::Control::ApacheCtl',
 	apxs => '/usr/sbin/apxs',
-	required_modules => ["log_config","perl","alias", "mime","dir"],
+	required_modules => ["log_config","alias", "mime","dir"],
 	config_block => q{
 	    DocumentRoot [% cwd %]/html
 	    AddDefaultCharset UTF-8
@@ -51,11 +53,17 @@ field default_profile => {
 };
 
 sub run {
+    my $config = shift;
     my %mode = %{$self->default_profile->{$self->mode}};
-    $mode{config_block} = $self->config_block
-	if ($self->config_block);
+
+    for(qw(apxs config_block hostname port required_modules)) {
+	$mode{$_} = $self->$_
+	    if ($self->$_);
+    }
+
     my $ra = RunApp::Apache->new(%mode);
-    RunApp->new($self->mode() => $ra)->development($self->default_config);
+    RunApp->new($self->mode() =>
+        $ra)->development({%{$self->default_config},%$config});
 }
 
 __END__

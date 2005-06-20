@@ -13,7 +13,7 @@ die unless GetOptions ("cover"   => \$config->{cover},
 		       "profiler"=> \$config->{profiler});
 
 my $profile = YAML::LoadFile('config.yaml');
-RunApp::Simple->new(%$profile)->run();
+RunApp::Simple->new(%$profile)->run($config);
 
 __END__
 
