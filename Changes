@@ -1,0 +1,9 @@
+0.04:
+  Date: Tue Jan  3 15:55:26 CST 2006
+  Changes: Fix non-working apache_cgi default configuration
+----
+0.03:
+  Date: Mon Jun 20 18:20:27 CST 2005
+  Changes: [FIX] config.yaml now allows following keys:
+           apxs config_block hostname port required_modules mode
+----

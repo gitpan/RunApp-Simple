@@ -6,7 +6,7 @@ use File::Spec::Functions qw(catfile catdir);
 use Cwd;
 use YAML;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 field mode => 'apache_cgi';
 field 'apxs';
@@ -43,7 +43,7 @@ field default_profile => {
 	report => 1,
 	CTL => 'RunApp::Control::ApacheCtl',
 	apxs => '/usr/sbin/apxs',
-	required_modules => ["log_config","alias", "mime","dir"],
+	required_modules => ["cgi", "log_config","alias", "mime","dir"],
 	config_block => q{
 	    DocumentRoot [% cwd %]/html
 	    AddDefaultCharset UTF-8
